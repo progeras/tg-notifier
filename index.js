@@ -2,6 +2,8 @@ require('dotenv').config();
 const Telegraf = require('telegraf');
 const { telegram } = require('./telegram');
 const session = require('telegraf/session');
+const extra = require('telegraf/extra')
+const markup = extra.HTML()
 const rp = require('request-promise');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -37,7 +39,7 @@ function startProdMode(bot) {
 app.post('/notify', function (req, res) {
     const recipients = process.env.TELEGRAM_CHAT_IDS || '';
     recipients.split(',').forEach((chatid) => {
-        telegram.sendMessage(chatid, req.body.message).then(() => {
+        telegram.sendMessage(chatid, req.body.message, markup).then(() => {
             res.send(`Message sent to ${chatid}`);
         }).catch((err) => {
             res.send(err);
